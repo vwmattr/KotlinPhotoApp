@@ -8,6 +8,9 @@ buildscript {
 
         //Third party
         retrofit_version = '2.3.0'
+
+        //Test
+        mockitoVersion = '2.7.22'
     }
 
     repositories {
