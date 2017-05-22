@@ -2,6 +2,7 @@ package com.mattrein.photoapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -10,21 +11,26 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.mattrein.photoapp.api.PhotoRetriever
 import com.mattrein.photoapp.models.Photo
 import com.mattrein.photoapp.models.PhotoList
+import dagger.android.AndroidInjection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+    @Inject
+    lateinit var retriever : PhotoRetriever
 
     var photos : List<Photo>? = null
     var mainAdapter : MainAdapter? = null
     lateinit var recyclerView : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        injectActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar = findViewById(R.id.toolbar) as Toolbar
@@ -33,8 +39,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         //TODO: Test all this below
         recyclerView = findViewById(R.id.recyclerview) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        var retriever = PhotoRetriever()
 
         val callback = object : Callback<PhotoList> {
             override fun onFailure(call: Call<PhotoList>?, t: Throwable?) {
@@ -51,6 +55,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         retriever.getPhotos(callback)
+    }
+
+    @VisibleForTesting
+    fun injectActivity() {
+        AndroidInjection.inject(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
