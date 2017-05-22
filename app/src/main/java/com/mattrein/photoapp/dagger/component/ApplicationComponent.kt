@@ -25,6 +25,13 @@ interface ApplicationComponent : AndroidInjector<PhotoApplication> {
     @Component.Builder
     abstract class Builder : AndroidInjector.Builder<PhotoApplication>() {
         //Required for DaggerApplication injection
+        abstract fun apiModule(apiModule: ApiModule): Builder
+
+        override fun seedInstance(p0: PhotoApplication?) {
+            apiModule(ApiModule())
+        }
+
+        abstract override fun build(): ApplicationComponent
     }
 
     fun photoApi(): PhotoApi
