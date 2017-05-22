@@ -1,5 +1,6 @@
 package com.mattrein.photoapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -72,8 +73,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onClick(v: View?) {
-        Toast.makeText(this, "Clicked on photo!", Toast.LENGTH_SHORT).show()
+    override fun onClick(view: View?) {
+        //TODO: Test this!
+        val intent = Intent(this, DetailActivity::class.java)
+        var holder = view?.tag as MainAdapter.PhotoViewHolder
+        intent.putExtra(DetailActivity.PHOTO, mainAdapter?.getPhoto(holder.adapterPosition))
+        startActivity(intent)
     }
 
 }
