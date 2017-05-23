@@ -60,7 +60,7 @@ class MainAdapterTest {
         val viewHolder = adapter?.onCreateViewHolder(parentView, 0)
 
         //3) Assert
-        assertThat(viewHolder).isInstanceOf(MainAdapter.PhotoViewHolder::class.java)
+        assertThat(viewHolder).isInstanceOf(PhotoViewHolder::class.java)
     }
 
     @Test
