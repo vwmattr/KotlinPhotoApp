@@ -60,6 +60,9 @@ dependencies {
     testCompile 'org.robolectric:robolectric:3.1.2'
     testCompile "com.android.support:appcompat-v7:$support_version"
     testCompile "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
+    testCompile ('com.nhaarman:mockito-kotlin:1.4.0') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
     testAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     testAnnotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 

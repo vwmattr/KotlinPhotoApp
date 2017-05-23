@@ -4,17 +4,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.mattrein.photoapp.models.Photo
 
 /**
  * RecycleviewAdapter for displaying the list of photos in the MainActivity.
+ * Note: Open for testing
  */
-class MainAdapter(var photos : List<Photo>,
+open class MainAdapter(var photos : List<Photo>,
                   var clickListener : View.OnClickListener) :
-        RecyclerView.Adapter<MainAdapter.PhotoViewHolder>() {
+        RecyclerView.Adapter<PhotoViewHolder>() {
 
     override fun getItemCount(): Int {
         return photos.size
@@ -32,34 +31,15 @@ class MainAdapter(var photos : List<Photo>,
         }
     }
 
-    fun getPhoto(adapterPosition: Int) : Photo {
+    //Note: Open for testing
+    open fun getPhoto(adapterPosition: Int) : Photo {
         return photos[adapterPosition]
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PhotoViewHolder {
         val itemView = LayoutInflater.from(parent?.context)
                 .inflate(R.layout.photo_item, parent, false)
-        return PhotoViewHolder(itemView)
-    }
-
-    inner class PhotoViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        var tags : TextView
-        var likes : TextView
-        var favorites : TextView
-        var photo_item : ImageView
-
-        init {
-            //Set the click listener
-            if (clickListener != null) {
-                itemView.setOnClickListener(clickListener)
-            }
-            itemView.tag = this
-            tags = itemView.findViewById(R.id.tags) as TextView
-            likes = itemView.findViewById(R.id.likes) as TextView
-            favorites = itemView.findViewById(R.id.favorites) as TextView
-            photo_item = itemView.findViewById(R.id.photo_item) as ImageView
-        }
-
+        return PhotoViewHolder(itemView, clickListener)
     }
 
 }

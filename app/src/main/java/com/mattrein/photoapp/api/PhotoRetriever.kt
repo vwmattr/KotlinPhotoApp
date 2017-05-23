@@ -7,12 +7,14 @@ import javax.inject.Inject
 
 /**
  * Retriever for getting data via the PhotoAPI interface.
+ * Note: Open for testing
  */
 @ActivityScope
-class PhotoRetriever
+open class PhotoRetriever
 @Inject constructor(private val service: PhotoApi) {
 
-    fun getPhotos(callback: Callback<PhotoList>) {
+    //Note: Open for testing
+    open fun getPhotos(callback: Callback<PhotoList>) {
         val call = service.getPhotos()
         call.enqueue(callback)
     }
