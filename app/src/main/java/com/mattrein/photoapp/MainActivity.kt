@@ -20,7 +20,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+/**
+ * The landing page for the app.
+ * Note: this is open for testing purposes
+ */
+open class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     @Inject
     lateinit var retriever : PhotoRetriever
@@ -36,30 +40,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        //TODO: Test all this below
         recyclerView = findViewById(R.id.recyclerview) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val callback = object : Callback<PhotoList> {
-            override fun onFailure(call: Call<PhotoList>?, t: Throwable?) {
-                Log.e("MainActivity", "Problem calling API", t)
-            }
-
-            override fun onResponse(call: Call<PhotoList>?, response: Response<PhotoList>?) {
-                response?.isSuccessful.let {
-                    this@MainActivity.photos = response?.body()?.hits
-                    mainAdapter = MainAdapter(this@MainActivity.photos!!, this@MainActivity)
-                    recyclerView.adapter = mainAdapter
-                }
-            }
-        }
-
-        retriever.getPhotos(callback)
-    }
-
-    @VisibleForTesting
-    fun injectActivity() {
-        AndroidInjection.inject(this)
+        loadAndDisplayPhotos(getPhotoApiCallback())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,11 +67,37 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        //TODO: Test this!
         val intent = Intent(this, DetailActivity::class.java)
-        var holder = view?.tag as MainAdapter.PhotoViewHolder
+        var holder = view?.tag as PhotoViewHolder
         intent.putExtra(DetailActivity.PHOTO, mainAdapter?.getPhoto(holder.adapterPosition))
         startActivity(intent)
+    }
+
+    @VisibleForTesting
+    fun loadAndDisplayPhotos(callback: Callback<PhotoList>) {
+        retriever.getPhotos(callback)
+    }
+
+    @VisibleForTesting
+    fun getPhotoApiCallback() : Callback<PhotoList> {
+        return object : Callback<PhotoList> {
+            override fun onFailure(call: Call<PhotoList>?, t: Throwable?) {
+                Log.e("MainActivity", "Problem calling API", t)
+            }
+
+            override fun onResponse(call: Call<PhotoList>?, response: Response<PhotoList>?) {
+                response?.isSuccessful.let {
+                    this@MainActivity.photos = response?.body()?.hits
+                    mainAdapter = MainAdapter(this@MainActivity.photos!!, this@MainActivity)
+                    recyclerView.adapter = mainAdapter
+                }
+            }
+        }
+    }
+
+    @VisibleForTesting
+    fun injectActivity() {
+        AndroidInjection.inject(this)
     }
 
 }
