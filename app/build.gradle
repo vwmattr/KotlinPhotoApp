@@ -22,8 +22,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
     //Android & Support
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:design:$support_version"
@@ -33,16 +31,10 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //Dagger
-    compile "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    provided 'javax.annotation:jsr250-api:1.0'
-    // because we use the support libraries
     compile ("com.google.dagger:dagger-android-support:$daggerVersion") {
         exclude group: 'com.google.code.findbugs'
     }
-    compile ("com.google.dagger:dagger-android:$daggerVersion") {
-        exclude group: 'com.google.code.findbugs'
-    }
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     //Third Party
@@ -55,22 +47,24 @@ dependencies {
 
     //Test
     testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:1.7.0'
     testCompile 'com.squareup.assertj:assertj-android:1.1.1'
     testCompile 'org.robolectric:robolectric:3.1.2'
+    testCompile 'com.nhaarman:mockito-kotlin:1.4.0'
+
+    // override test defaults to match app
     testCompile "com.android.support:appcompat-v7:$support_version"
-    testCompile "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
-    testCompile ('com.nhaarman:mockito-kotlin:1.4.0') {
-        exclude group: 'org.jetbrains.kotlin'
-    }
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
     testAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     testAnnotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
-
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
+
 repositories {
     mavenCentral()
 }
